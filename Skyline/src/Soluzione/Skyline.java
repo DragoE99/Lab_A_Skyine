@@ -6,6 +6,8 @@ import java.util.ArrayList;
 public class Skyline {
 
     public static void main(String[] args) {
+    	
+    	System.out.println("udefij");
         
         File edifici = new File(args[0]);
         File comandi = new File(args[1]);
