@@ -1,0 +1,11 @@
+build 2050 pN2050n1 N 20 50 30
+build 2050 pN2050n2 N 10 50 20
+build 2050 pN2050n3 N 15 30 35
+build 2051 pS2050n2 S 10 40 40
+demolish 2051 pN2050n3
+build 2051 pS2051n1 S 20 50 20
+demolish 2053 pS2050n2
+build 2054 pS2054n1 S 30 70 30
+build 2054 pN2054n2 N 5 20 40
+demolish 2055 pN2050n1
+build 2055 pS2055n3 S 25 80 65
