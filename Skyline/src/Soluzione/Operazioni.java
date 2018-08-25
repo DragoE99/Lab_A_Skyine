@@ -154,104 +154,55 @@ public class Operazioni {
     
     public static double height(int anno) {
         
-        int countYear = trova(anno);
-        
-        boolean[] bSud = new boolean[anniModifiche.get(countYear).maxDistanzaSud()];
-        
-        boolean[] bNord = new boolean[anniModifiche.get(countYear).maxDistanzaNord()];        //Array di boolean grande quanto la larghezza dello skyline
-        
-        anniModifiche.get(countYear).ordinaAltezze();               //ordiniamo la lista di edifici dell'anno desiderato
-        
-        
-        /*for(Edificio x : anniModifiche.get(countYear).getLista())
-            if(x.getLato().equals("S"))
-                listaSud.add(x);
-            else
-                listaNord.add(x);*/
-        
-        
-        ArrayList<Edificio> listaAnnoRichiesto = anniModifiche.get(countYear).getLista();
-        
-        Stack<Edificio> edificiSud = new Stack<Edificio>();             //edifici visibili
-        
-        Stack<Integer> ampiezzeSud = new Stack<Integer>();
-        
-        Stack<Edificio> edificiNord = new Stack<Edificio>();
-        
-        Stack<Integer> ampiezzeNord = new Stack<Integer>();
-        
-        int counterSud = 0;          //Mi serve per la media ponderata
-        
-        int counterNord = 0;
-        
-        int contaTrue = 0;     
-        
-        for(int i = 0; i < listaAnnoRichiesto.size(); i++){      //Scandisce tutta la lista di edifici 
-            
-            Edificio x = listaAnnoRichiesto.get(i);           //VerrÃƒÂ  analizzato prima il piÃƒÂ¹ alto, poi il secondo piÃƒÂ¹ alto e cosÃƒÂ¬ via 
-            
-            if(x.getLato().equals("S")){
-            
-                counterSud = 0;
-                for(int j = x.getDistanza() ; j < (x.getDistanza() + x.getBase()); j++){           // Scandisce la porzione di skyline occupata dall'edificio
-               
-                
-                    if (bSud[j])  {                    //Se nella posizione considerata l'array di boolean risulta vero incremento il contatore di 1
-                                            //(in quanto ciÃƒÂ² significa che c'ÃƒÂ¨ un palazzo piÃƒÂ¹ alto in quel punto)
-                        counterSud++;
-                        continue;
-                    }
-                
-                    bSud[j] = true;
-                    contaTrue++;
-                }
-            
-                edificiSud.push(x);           //Inserisco l'edificio corrente nello stack
-            
-                ampiezzeSud.push(x.getBase() - counterSud);   //inserisco nello stack l'ampiezza effettivamente occupata nello skyline da parte dell'edificio corrente
-            }                                                       //Facendo: base - contatore  si trova la parte di edificio che non ÃƒÂ¨ "coperta" da edifici piÃƒÂ¹ alti
-            
-            else
-                
-            {
-                counterNord = 0;
-                for(int j = x.getDistanza() ; j < (x.getDistanza() + x.getBase()); j++){           // Scandisce la porzione di skyline occupata dall'edificio
-               
-                
-                    if (bNord[j])  {                    //Se nella posizione considerata l'array di boolean risulta vero incremento il contatore di 1
-                                                        //(in quanto ciÃƒÂ² significa che c'ÃƒÂ¨ un palazzo piÃƒÂ¹ alto in quel punto)
-                        counterNord++;
-                        
-                    } else {
-                
-                    bNord[j] = true;
-                    contaTrue++;
-                    }
-                }
-            
-                edificiNord.push(x);           //Inserisco l'edificio corrente nello stack
-            
-                ampiezzeNord.push(x.getBase() - counterNord);   //inserisco nello stack l'ampiezza effettivamente occupata nello skyline da parte dell'edificio corrente
-            }
-            if (contaTrue >= (bSud.length + bNord.length))                                                 // Se tutto l'array ÃƒÂ¨ true, esco dal for e evito iterazioni inutili
-                break;
-        }           
-
-
-        double mSud = mediaPesata(edificiSud, ampiezzeSud, anniModifiche.get(countYear).maxDistanzaSud());
-        
-        double mNord = mediaPesata(edificiNord, ampiezzeNord, anniModifiche.get(countYear).maxDistanzaNord());
-        
-        //System.out.println(anniModifiche.get(countYear).maxDistanzaSud());
-        //System.out.println(anniModifiche.get(countYear).maxDistanzaNord());
-        
-        return (mSud * anniModifiche.get(countYear).maxDistanzaSud() + mNord * anniModifiche.get(countYear).maxDistanzaNord())/(double)(anniModifiche.get(countYear).maxDistanzaSud() + anniModifiche.get(countYear).maxDistanzaNord());
+    	int countYear = trova(anno);
+    	int AmpN= anniModifiche.get(countYear).maxDistanzaNord();
+    	int AmpS= anniModifiche.get(countYear).maxDistanzaSud();
+    	boolean[] bSud = new boolean[AmpS];        
+        boolean[] bNord = new boolean[AmpN];
+    	anniModifiche.get(countYear).ordinaAltezze();
+    	double AltMedia = 0;
+    	
+    	//ricavo lista di edifici dell'anno di cui voglio l'altezza
+    	ArrayList<Edificio> listaAnnoRichiesto = anniModifiche.get(countYear).getLista();
+    	
+    	for(int i = 0; i < listaAnnoRichiesto.size(); i++){//scansione lista di edifici
+    		 
+    		Edificio x = listaAnnoRichiesto.get(i);
+    		
+    		if(x.getLato().equals("S")){
+    			
+    			for(int j =x.getDistanza() ; j < (x.getDistanza() + x.getBase()); j++){		//scansiono l'array nell'intervallo di valori dell'edificio
+    				
+    				if(bSud[j]==false){
+    					AltMedia += x.getAltezza();
+    					bSud[j]=true;
+    				
+    				}
+    			}
+    		
+    		}else{
+    			for(int j=x.getDistanza() ;	j < (x.getDistanza() + x.getBase()); j++){
+    				
+    				if(bNord[j] ==false){
+    					AltMedia += x.getAltezza();
+    					bNord[j]=true;
+    				}
+    			}
+    			
+    		}
+    		
+    	}
+    	
+    	
+    	return(AltMedia/(AmpN+AmpS));    
+    
+    
     }
     
     
     
     
-    private static double mediaPesata(Stack<Edificio> sEdifici, Stack<Integer> sAmpiezze, double ampiezza){
+ /*   private static double mediaPesata(Stack<Edificio> sEdifici, Stack<Integer> sAmpiezze, double ampiezza){
         if(ampiezza == 0){
             return 0;
         }
@@ -272,7 +223,7 @@ public class Operazioni {
             return somma/(double)ampiezza;
         }
     }
-
+*/
     
     
     
